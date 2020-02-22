@@ -4,10 +4,8 @@ import {
   IonItem,
   IonLabel,
   IonList,
-  IonListHeader,
   IonMenu,
   IonMenuToggle,
-  IonNote,
   IonButton,
   IonHeader,
   IonToolbar,
@@ -48,7 +46,6 @@ const Menu: React.FunctionComponent<MenuProps> = ({ selectedPage }) => {
   let savedFavorites = localStorage.getItem('favorites');
   savedFavorites = savedFavorites ? JSON.parse(savedFavorites) : {};
 
-  let [endPoints, setEndpoints] = useState<any>(endPointArray);
   let [favorites, setFavorites] = useState<any>(savedFavorites);
 
   useEffect(() => {
