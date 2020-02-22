@@ -50,7 +50,7 @@ const ParamSelect: React.FC<any> = (params) => {
   }
 
 //  let options: string[] = pattern ? pattern.match(/[\w|\s|-]{3,}/g) : null;
-  let options: string[] = pattern ? pattern.match(/([A-Z][A-Z|a-z|\s]*)/g) : null;
+  let options: string[] = pattern ? pattern.match(/([A-Z][A-Z|a-z|0-9|\s|-]*)/g) : null;
   if (options) {
     paramTypes[param] = (
       <IonItem>
