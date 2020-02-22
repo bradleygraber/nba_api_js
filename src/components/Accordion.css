@@ -1,0 +1,8 @@
+.hiddenAccordion {
+  height: 0;
+}
+
+.visibleAccordion {
+  height: 400px;
+  overflow: auto;
+}
