@@ -25,7 +25,7 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
 
   let [paramState, setParamState] = useState<any>({});
 
-//  let [href, setHref] = useState("");
+  let [href, setHref] = useState("");
 
   let [columns, setColumns] = useState<any>([]);
   let [data, setData] = useState<any>([]);
@@ -52,7 +52,6 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
   }
   const request = async (endPoint: string, params: any) => {
     var url = `http://localhost:8080/https://stats.nba.com/stats/${endPoint.toLowerCase()}?`;
-//    let endPointInfo = endPoints[endPoint];
 
     for (let prop in params) {
       url += prop + "=" + params[prop].replace(/\s/g, '+') + "&";
@@ -81,15 +80,17 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
       generateTableData(data.resultSet);
     console.log(data);
   }
-//  if (endPoint === "AssistLeaders")
-//    request(endPoint);
 
   useEffect(() => {
-//    var url = `http://stats.nba.com/stats/${endPoint.toLowerCase()}?`;
-//    for (let prop in paramState) {
-//      url += prop + "=" + paramState[prop].replace(/\s/g, '+') + "&";
-//    }
-//    setHref(url);
+    console.log("page switch");
+    setParamState({});
+  }, [match])
+  useEffect(() => {
+    var url = `http://stats.nba.com/stats/${endPoint.toLowerCase()}?`;
+    for (let prop in paramState) {
+      url += prop + "=" + paramState[prop].replace(/\s/g, '+') + "&";
+    }
+    setHref(url);
   }, [paramState, endPoint])
 
   return (
@@ -100,6 +101,7 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>{match.params.name}</IonTitle>
+          {href}
         </IonToolbar>
       </IonHeader>
 
