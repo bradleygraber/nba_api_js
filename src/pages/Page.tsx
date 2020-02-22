@@ -26,6 +26,7 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
   let [paramState, setParamState] = useState<any>({});
   let [showAlert, setShowAlert] = useState(false);
   let [alertText, setAlertText] = useState("");
+  let [loading, setLoading] = useState(false);
 
   let [href, setHref] = useState("");
 
@@ -33,7 +34,6 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
   let [data, setData] = useState<any>([]);
 
   let generateTableData = (data: any) => {
-    console.log(data);
     let rowData = data.length > 0 ? data[0].rowSet : data.rowSet;
     let headers = data.length > 0 ? data[0].headers: data.headers;
 
@@ -47,12 +47,14 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
       outputRowData.push({...rowObj})
     });
     headers.forEach((header: any, index: any) => {
-      outputHeaderData.push({name: header, selector: header, center: true, compact: true, sortable: true})
+      outputHeaderData.push({name: header, selector: header, center: true, sortable: true})
     })
     setColumns(outputHeaderData);
     setData(outputRowData);
+    setLoading(false);
   }
   const request = async (endPoint: string, params: any) => {
+    setLoading(true);
     var url = `http://localhost:8080/https://stats.nba.com/stats/${endPoint.toLowerCase()}?`;
 
     for (let prop in params) {
@@ -84,6 +86,7 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
       .catch(error => {
         setAlertText(error);
         setShowAlert(true);
+        setLoading(false);
       });
 
     if (data && data.resultSets)
@@ -93,9 +96,9 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
   }
 
   useEffect(() => {
-    console.log("page switch");
     setParamState({});
   }, [match])
+
   useEffect(() => {
     var url = `http://stats.nba.com/stats/${endPoint.toLowerCase()}?`;
     for (let prop in paramState) {
@@ -136,6 +139,7 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
                 required={requiredParams.includes(param)}
                 state={paramState[param]}
                 setState={setParamState}
+                endPoint={endPoint}
                 />
               </IonCol>
             )
@@ -154,6 +158,7 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
             dense={true}
             fixedHeader
             fixedHeaderScrollHeight="300px"
+            progressPending={loading}
           />
         </IonCol></IonRow>
         </IonGrid>
