@@ -24,6 +24,20 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+import endPoints from './data/endPoints.json';
+
+let firstProp:string = "";
+interface StringIter {
+  [index: string]: any,
+}
+let endPointsS: StringIter = endPoints;
+for (let prop in endPointsS) {
+  if (endPointsS[prop].status !== "deprecated") {
+    firstProp = prop;
+    break;
+  }
+}
+
 const App: React.FC = () => {
 
   const [selectedPage, setSelectedPage] = useState('');
@@ -38,7 +52,7 @@ const App: React.FC = () => {
               setSelectedPage(props.match.params.name);
               return <Page {...props} />;
             }} exact={true} />
-            <Route path="/" render={() => <Redirect to="/page/Inbox" />} exact={true} />
+            <Route path="/" render={() => <Redirect to={`/page/${firstProp}`} />} exact={true} />
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>
