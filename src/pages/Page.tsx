@@ -31,8 +31,9 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
   let [data, setData] = useState<any>([]);
 
   let generateTableData = (data: any) => {
-    let rowData = data.length > 0 ? data[0].rowSet : [];
-    let headers = data.length > 0 ? data[0].headers: [];
+    console.log(data);
+    let rowData = data.length > 0 ? data[0].rowSet : data.rowSet;
+    let headers = data.length > 0 ? data[0].headers: data.headers;
 
     let outputRowData: any[] = [];
     let outputHeaderData: any[] = [];
@@ -44,7 +45,7 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
       outputRowData.push({...rowObj})
     });
     headers.forEach((header: any, index: any) => {
-      outputHeaderData.push({name: header, selector: header, center: true, compact: true})
+      outputHeaderData.push({name: header, selector: header, center: true, compact: true, sortable: true})
     })
     setColumns(outputHeaderData);
     setData(outputRowData);
@@ -132,12 +133,17 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
             <IonButton onClick={(e:any) => {request(endPoint, paramState)}}>Submit</IonButton>
           </IonCol>
         </IonRow>
+        <IonRow><IonCol>
+          <DataTable
+            responsive
+            columns={columns}
+            data={data}
+            dense={true}
+            fixedHeader
+            fixedHeaderScrollHeight="300px"
+          />
+        </IonCol></IonRow>
         </IonGrid>
-        <DataTable
-          columns={columns}
-          data={data}
-          dense={true}
-        />
       </IonContent>
     </IonPage>
   );

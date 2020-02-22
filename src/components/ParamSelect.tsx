@@ -49,7 +49,8 @@ const ParamSelect: React.FC<any> = (params) => {
     )
   }
 
-  let options: string[] = pattern ? pattern.match(/[\w|\s|-]{3,}/g) : null;
+//  let options: string[] = pattern ? pattern.match(/[\w|\s|-]{3,}/g) : null;
+  let options: string[] = pattern ? pattern.match(/([A-Z][A-Z|a-z|\s]*)/g) : null;
   if (options) {
     paramTypes[param] = (
       <IonItem>
@@ -65,7 +66,8 @@ const ParamSelect: React.FC<any> = (params) => {
 
   let def = (
     <IonItem>
-      <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel><IonInput placeholder="enter text"></IonInput>
+      <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
+      <IonInput onIonChange={(e) => {selectChanged(e, setState, param)}} placeholder="enter text"></IonInput>
     </IonItem>
   );
 
