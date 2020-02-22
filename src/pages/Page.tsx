@@ -74,9 +74,9 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
       .then(result => result)
       .catch(error => console.log('error', error));
 
-    if (data.resultSets)
+    if (data && data.resultSets)
       generateTableData(data.resultSets);
-    if (data.resultSet)
+    if (data && data.resultSet)
       generateTableData(data.resultSet);
     console.log(data);
   }
