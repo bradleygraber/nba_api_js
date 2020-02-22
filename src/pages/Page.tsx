@@ -1,5 +1,5 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonCol, IonLabel, IonItem,
-  IonToolbar, IonGrid, IonRow, IonButton } from '@ionic/react';
+  IonToolbar, IonGrid, IonRow, IonButton, IonAlert } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
 import ParamSelect from '../components/ParamSelect';
@@ -24,6 +24,8 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
   let requiredParams = endPoints[endPoint].required_parameters;
 
   let [paramState, setParamState] = useState<any>({});
+  let [showAlert, setShowAlert] = useState(false);
+  let [alertText, setAlertText] = useState("");
 
   let [href, setHref] = useState("");
 
@@ -70,15 +72,24 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
     };
 
     let data = await fetch(url, requestOptions)
-      .then(response => response.json())
+      .then(async response => {
+        if (response.status === 200)
+          return response.json();
+        else {
+          let message = await response.text();
+          throw Error(message);
+        }
+      })
       .then(result => result)
-      .catch(error => console.log('error', error));
+      .catch(error => {
+        setAlertText(error);
+        setShowAlert(true);
+      });
 
     if (data && data.resultSets)
       generateTableData(data.resultSets);
     if (data && data.resultSet)
       generateTableData(data.resultSet);
-    console.log(data);
   }
 
   useEffect(() => {
@@ -147,6 +158,13 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
         </IonCol></IonRow>
         </IonGrid>
       </IonContent>
+      <IonAlert
+        isOpen={showAlert}
+        onDidDismiss={() => setShowAlert(false)}
+        header={'Bad Request'}
+        message={alertText}
+        buttons={['OK']}
+      />
     </IonPage>
   );
 };
