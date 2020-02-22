@@ -101,7 +101,7 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
             <IonMenuButton />
           </IonButtons>
           <IonTitle>{match.params.name}</IonTitle>
-          {href}
+          <a id="titleUrl" title={href} target="_blank" rel="noopener noreferrer" href={href}>Current Query URL</a>
         </IonToolbar>
       </IonHeader>
 
