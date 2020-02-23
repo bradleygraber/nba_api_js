@@ -49,7 +49,8 @@ const ParamSelect: React.FC<any> = (params) => {
   let paramTypes: StringIter = {}
 
   let options: string[] = pattern ? pattern.match(/(?<=\().*?(?=\))/g) : null;
-  if (options && options[0].indexOf("\\d") === -1) {
+  // eslint-disable-next-line
+  if (options && options[0].indexOf("\d") === -1) {
     options = options.map((string, index) => {
       return string.replace("(", "");
     })
@@ -110,6 +111,7 @@ const ParamSelect: React.FC<any> = (params) => {
       selectChanged({detail: {value: "00"}}, setState, param)
     if (param === "Season" || param === "SeasonYear")
       selectChanged({detail: {value: years[0]}}, setState, param)
+    // eslint-disable-next-line
     if (options && options[0].indexOf("\d") === -1)
       selectChanged({detail: {value: options[0]}}, setState, param)
     if (param === "StatCategory")
