@@ -70,6 +70,11 @@ const Page: React.FC<any> = ({ match, proxy }) => {
     myHeaders.append("x-nba-stats-token", "true");
     myHeaders.append("origin", "https://stats.nba.com");
     myHeaders.append("Referer", "https://stats.nba.com");
+    myHeaders.append("User-Agent", "Firefox/55.0");
+    myHeaders.append("Accept", "application/json, text/plain, */*");
+    myHeaders.append("Accept-Language", "en-US,en;q=0.5");
+    myHeaders.append("Accept-Encoding", "gzip, deflate");
+    myHeaders.append("DNT", "1");
 
     var requestOptions:any = {
       method: 'GET',
@@ -77,7 +82,7 @@ const Page: React.FC<any> = ({ match, proxy }) => {
       redirect: 'follow'
     };
 
-    let data = await timeout(3000, fetch(url, requestOptions))
+    let data = await timeout(6000, fetch(url, requestOptions))
       .then(async (response:any) => {
         if (response.status === 200)
           return response.json();
