@@ -22,7 +22,7 @@ const timeout = (ms: number, promise:Promise<any>) => {
   })
 }
 
-const Page: React.FC<any> = ({ match, proxy }) => {
+const Page: React.FC<any> = ({ match, proxy, headers }) => {
   let endPoint = match.params.name;
   let patterns = endPoints[endPoint].parameter_patterns;
   let requiredParams = endPoints[endPoint].required_parameters;
@@ -65,21 +65,16 @@ const Page: React.FC<any> = ({ match, proxy }) => {
       url += prop + "=" + params[prop].replace(/\s/g, '+') + "&";
     }
 
-    var myHeaders = new Headers();
-    myHeaders.append("x-nba-stats-origin", "stats");
-    myHeaders.append("x-nba-stats-token", "true");
-    myHeaders.append("origin", "https://stats.nba.com");
-    myHeaders.append("Referer", "https://stats.nba.com");
-    myHeaders.append("User-Agent", "Firefox/55.0");
-    myHeaders.append("Accept", "application/json, text/plain, */*");
-    myHeaders.append("Accept-Language", "en-US,en;q=0.5");
-    myHeaders.append("Accept-Encoding", "gzip, deflate");
-    myHeaders.append("DNT", "1");
+    try {
+      var parsed: any = JSON.parse(headers);
+    }
+    catch (e) {}
+    let parsedHeaders = parsed ? parsed : {};
 
+    console.log(parsedHeaders);
     var requestOptions:any = {
       method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
+      headers: parsedHeaders,
     };
 
     let data = await timeout(6000, fetch(url, requestOptions))

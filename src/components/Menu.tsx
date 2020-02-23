@@ -45,13 +45,14 @@ for (let prop in endPointsS) {
   }
 }
 
-const Menu: React.FunctionComponent<any> = ({ selectedPage, setProxy, proxy }) => {
+const Menu: React.FunctionComponent<any> = ({ selectedPage, setProxy, proxy, setHeaders, headers }) => {
   let savedFavorites = localStorage.getItem('favorites');
   savedFavorites = savedFavorites ? JSON.parse(savedFavorites) : {};
 
   let [favorites, setFavorites] = useState<any>(savedFavorites);
   let [modalVisible, setModalVisible] = useState(false);
   let [localProxy, setLocalProxy] = useState(proxy);
+  let [localHeaders, setLocalHeaders] = useState(headers);
 
   useEffect(() => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
@@ -120,12 +121,16 @@ const Menu: React.FunctionComponent<any> = ({ selectedPage, setProxy, proxy }) =
           class="ion-text-center"
           color="primary">
           <IonLabel>
-            Set Proxy
+            Set Proxy & Headers
           </IonLabel>
         </IonItem>
         <IonItem>
           <IonLabel position="stacked">Proxy URL</IonLabel>
           <IonInput value={localProxy} onIonChange={(e: any) => setLocalProxy(e.detail.value)}></IonInput>
+        </IonItem>
+        <IonItem>
+          <IonLabel position="stacked">Headers</IonLabel>
+          <IonInput value={localHeaders} onIonChange={(e: any) => setLocalHeaders(e.detail.value)}></IonInput>
         </IonItem>
         <IonGrid>
         <IonRow>
@@ -133,7 +138,7 @@ const Menu: React.FunctionComponent<any> = ({ selectedPage, setProxy, proxy }) =
             <IonButton onClick={() => setModalVisible(false)}>Cancel</IonButton>
           </IonCol>
           <IonCol>
-            <IonButton onClick={() => {setProxy(localProxy); setModalVisible(false)}}>Set</IonButton>
+            <IonButton onClick={() => {setProxy(localProxy); setHeaders(localHeaders); setModalVisible(false)}}>Set</IonButton>
           </IonCol>
         </IonRow>
         </IonGrid>

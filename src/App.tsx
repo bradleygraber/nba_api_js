@@ -40,19 +40,35 @@ for (let prop in endPointsS) {
 }
 
 const defaultProxy = "https://cors-anywhere.herokuapp.com/";
+const defaultHeaders = JSON.stringify({
+  "x-nba-stats-origin": "stats",
+  "x-nba-stats-token": "true",
+  "origin": "https://stats.nba.com",
+  "Referer": "https://stats.nba.com",
+  "User-Agent": "Firefox/55.0",
+  "Accept": "application/json, text/plain, */*",
+  "Accept-Language": "en-US,en;q=0.5",
+  "Accept-Encoding": "gzip, deflate",
+  "DNT": "1",
+})
 
 const App: React.FC = () => {
   let savedProxy = localStorage.getItem('proxy');
-  savedProxy = savedProxy !== undefined ? savedProxy : defaultProxy;
+  savedProxy = savedProxy !== null && savedProxy !== undefined ? savedProxy : defaultProxy;
+  let savedHeaders:any = localStorage.getItem('headers');
+  savedHeaders = savedHeaders !== null && savedHeaders !== undefined ? savedHeaders : defaultHeaders;
 
   const [selectedPage, setSelectedPage] = useState('');
   const [widthLoaded, setWidthLoaded] = useState(false);
   const [proxy, setProxy] = useState(savedProxy);
+  const [headers, setHeaders] = useState(savedHeaders);
 
   useEffect(() => {
     if (proxy)
       localStorage.setItem('proxy', proxy);
-  }, [proxy])
+    if (headers)
+      localStorage.setItem('headers', headers);
+  }, [proxy, headers])
 
   useEffect(() => {
     let checkWidthLoaded = setInterval(check, 100);
@@ -70,11 +86,11 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <IonSplitPane contentId="main">
-          <Menu selectedPage={selectedPage} setProxy={setProxy} proxy={proxy}/>
+          <Menu selectedPage={selectedPage} {...{proxy, setProxy, headers, setHeaders}}/>
           <IonRouterOutlet id="main">
             <Route path="/page/:name" render={(props) => {
               setSelectedPage(props.match.params.name);
-              return <Page {...props} {...{proxy}} />;
+              return <Page {...props} {...{proxy, headers}} />;
             }} exact={true} />
             <Route path="/" render={() => <Redirect to={`/page/${firstProp}`} />} exact={true} />
           </IonRouterOutlet>
