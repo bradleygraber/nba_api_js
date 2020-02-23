@@ -120,14 +120,6 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
       </IonHeader>
 
       <IonContent>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">{ match.params.name }</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonItem>
-        <IonLabel>Required information denoted in red</IonLabel>
-        </IonItem>
         <IonGrid><IonRow>
           {endPoints[endPoint].parameters.map((param: string, index:number) => {
             return (

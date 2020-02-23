@@ -23,7 +23,7 @@ const FloatingDialog: React.FC<any> = () => {
 
   useEffect(() => {
     setBounds(dialogBoxIsVisible ?
-      {top: 0, left: 0, right: document.body.clientWidth-400, bottom: document.body.clientHeight-400} :
+      {top: 0, left: 0, right: document.body.clientWidth-400, bottom: document.body.clientHeight-50} :
       {top: 0, left: 0, right: document.body.clientWidth-400, bottom: document.body.clientHeight-50} );
   }, [dialogBoxIsVisible]);
 
