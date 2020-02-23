@@ -108,6 +108,7 @@ const Page: React.FC<any> = ({ match, proxy }) => {
     for (let prop in paramState) {
       url += prop + "=" + paramState[prop].replace(/\s/g, '+') + "&";
     }
+    url = url.substring(0, url.length - 1);
     setHref(url);
   }, [paramState, endPoint])
 
