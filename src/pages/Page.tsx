@@ -13,6 +13,14 @@ interface StringIter {
 }
 let endPoints: StringIter = eps;
 
+const timeout = (ms: number, promise:Promise<any>) => {
+  return new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      reject(new Error("timeout"))
+    }, ms)
+    promise.then(resolve, reject)
+  })
+}
 
 const Page: React.FC<any> = ({ match, proxy }) => {
   let endPoint = match.params.name;
@@ -69,8 +77,8 @@ const Page: React.FC<any> = ({ match, proxy }) => {
       redirect: 'follow'
     };
 
-    let data = await fetch(url, requestOptions)
-      .then(async response => {
+    let data = await timeout(3000, fetch(url, requestOptions))
+      .then(async (response:any) => {
         if (response.status === 200)
           return response.json();
         else {
