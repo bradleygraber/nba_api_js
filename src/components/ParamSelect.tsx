@@ -81,20 +81,22 @@ const ParamSelect: React.FC<any> = (params) => {
       </IonSelect>
     </IonItem>
   );
-  paramTypes.StatCategory =  (
-    <IonItem>
-      <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
-      <IonSelect value={state ? state : statCategories[0].value} interface="popover" onIonChange={(e) => {selectChanged(e, setState, param)}}>
-        {statCategories.map((option, index) => {
-          return <IonSelectOption key={index} value={option.value}>{option.name}</IonSelectOption>
-        })}
-      </IonSelect>
-    </IonItem>
-  );
+  if (endPoint !== "HomePageLeaders") {
+    paramTypes.StatCategory =  (
+      <IonItem>
+        <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
+        <IonSelect value={state ? state : statCategories[0].value} interface="popover" onIonChange={(e) => {selectChanged(e, setState, param)}}>
+          {statCategories.map((option, index) => {
+            return <IonSelectOption key={index} value={option.value}>{option.name}</IonSelectOption>
+          })}
+        </IonSelect>
+      </IonItem>
+    );
+  }
   paramTypes.Season = paramTypes.SeasonYear = (
     <IonItem>
       <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
-      <IonSelect value={state ? state : years[0]} onIonChange={(e) => {selectChanged(e, setState, param)}}>
+      <IonSelect value={state ? state : years[0]} onIonChange={(e) => {selectChanged(e, setState, param)}}  interface="popover" >
         {years.map((option, index) => {
           return <IonSelectOption key={index} value={option}>{option}</IonSelectOption>
         })}
@@ -127,7 +129,7 @@ const ParamSelect: React.FC<any> = (params) => {
     // eslint-disable-next-line
     if (options && options[0].indexOf("\d") === -1)
       selectChanged({detail: {value: options[0]}}, setState, param)
-    if (param === "StatCategory")
+    if (param === "StatCategory" && endPoint != "HomePageLeaders")
       selectChanged({detail: {value: statCategories[0].value}}, setState, param)
   }
 
