@@ -50,8 +50,8 @@ const App: React.FC = () => {
   const [proxy, setProxy] = useState(savedProxy);
 
   useEffect(() => {
-    localStorage.setItem('proxy', proxy);
-    console.log("saving" + proxy)
+    if (proxy)
+      localStorage.setItem('proxy', proxy);
   }, [proxy])
 
   useEffect(() => {
