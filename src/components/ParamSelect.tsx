@@ -1,4 +1,4 @@
-import {IonItem, IonLabel, IonInput, IonSelect, IonSelectOption} from '@ionic/react';
+import {IonItem, IonLabel, IonInput, IonSelect, IonSelectOption, IonDatetime} from '@ionic/react';
 import React from 'react';
 import './ParamSelect.css';
 
@@ -30,6 +30,10 @@ const statCategories: any[] = [
 
 
 const selectChanged = (e: any, setState: any, param: any) => {
+  let lowercase = param.toLowerCase();
+  if (lowercase.search("date") !== -1) {
+    e.detail.value = new Date(e.detail.value).toLocaleDateString(["en-us"]);
+  }
   setState((v:any) => {return {...v, [param]: e.detail.value}})
 }
 
@@ -97,12 +101,21 @@ const ParamSelect: React.FC<any> = (params) => {
       </IonSelect>
     </IonItem>
   )
+  let lowercase = param.toLowerCase();
+  if (lowercase.search("date") !== -1) {
+    paramTypes[param] = (
+      <IonItem>
+        <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
+        <IonDatetime displayFormat="MMM DD, YYYY" max="2056" value={state ? state : ""} onIonChange={(e) => {selectChanged(e, setState, param)}}></IonDatetime>
+      </IonItem>
+    )
+  }
 
 
   let def = (
     <IonItem>
       <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
-      <IonInput onIonChange={(e) => {selectChanged(e, setState, param)}} placeholder="enter text"></IonInput>
+      <IonInput value={state ? state : ""}onIonChange={(e) => {selectChanged(e, setState, param)}} placeholder="enter text"></IonInput>
     </IonItem>
   );
 
