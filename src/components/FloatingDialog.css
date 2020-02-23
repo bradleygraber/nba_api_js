@@ -1,0 +1,9 @@
+.dialogBox {
+  border: 2px solid black;
+  height: 400px;
+  width: 400px;
+}
+
+.dialogBox.hidden {
+  height: 50px;
+}

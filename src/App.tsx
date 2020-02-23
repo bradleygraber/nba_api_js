@@ -1,7 +1,7 @@
 import Menu from './components/Menu';
 import Page from './pages/Page';
-import React, { useState } from 'react';
-import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
+import React, { useState, useEffect } from 'react';
+import { IonApp, IonRouterOutlet, IonSplitPane, IonPage } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Redirect, Route } from 'react-router-dom';
 
@@ -20,6 +20,7 @@ import '@ionic/react/css/text-alignment.css';
 import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
+import FloatingDialog from "./components/FloatingDialog";
 
 /* Theme variables */
 import './theme/variables.css';
@@ -39,10 +40,22 @@ for (let prop in endPointsS) {
 }
 
 const App: React.FC = () => {
-
   const [selectedPage, setSelectedPage] = useState('');
+  const [widthLoaded, setWidthLoaded] = useState(false);
+
+  useEffect(() => {
+    let checkWidthLoaded = setInterval(check, 100);
+    function check () {
+      if (document.body.clientWidth !== 0) {
+        setWidthLoaded(true);
+        clearInterval(checkWidthLoaded);
+      }
+    };
+  }, [])
+
 
   return (
+    <>
     <IonApp>
       <IonReactRouter>
         <IonSplitPane contentId="main">
@@ -57,6 +70,10 @@ const App: React.FC = () => {
         </IonSplitPane>
       </IonReactRouter>
     </IonApp>
+      {
+        !widthLoaded ? <IonPage></IonPage> : <FloatingDialog />
+      }
+    </>
   );
 };
 
