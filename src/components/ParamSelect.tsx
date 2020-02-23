@@ -46,45 +46,13 @@ const ParamSelect: React.FC<any> = (params) => {
     let year = endPoint !== "DraftHistory" ? `${i.toString()}-${(i+1).toString().substring(2)}` : `${i.toString()}`
     years.push(year)
   }
+  let paramTypes: StringIter = {}
 
-
-  let paramTypes: StringIter = {
-    "LeagueID": (
-      <IonItem>
-        <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
-        <IonSelect value={state ? state : "00"} interface="popover" onIonChange={(e) => {selectChanged(e, setState, param)}}>
-          <IonSelectOption value="00">NBA</IonSelectOption>
-          <IonSelectOption value="01">ABA</IonSelectOption>
-          <IonSelectOption value="20">G League</IonSelectOption>
-          <IonSelectOption value="10">WNBA</IonSelectOption>
-        </IonSelect>
-      </IonItem>
-    ),
-    "StatCategory": (
-      <IonItem>
-        <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
-        <IonSelect value={state ? state : statCategories[0].value} interface="popover" onIonChange={(e) => {selectChanged(e, setState, param)}}>
-          {statCategories.map((option, index) => {
-            return <IonSelectOption key={index} value={option.value}>{option.name}</IonSelectOption>
-          })}
-        </IonSelect>
-      </IonItem>
-    )
-  }
-  paramTypes.Season = paramTypes.SeasonYear = (
-    <IonItem>
-      <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
-      <IonSelect value={state ? state : years[0]} onIonChange={(e) => {selectChanged(e, setState, param)}}>
-        {years.map((option, index) => {
-          return <IonSelectOption key={index} value={option}>{option}</IonSelectOption>
-        })}
-      </IonSelect>
-    </IonItem>
-  )
-
-//  let options: string[] = pattern ? pattern.match(/[\w|\s|-]{3,}/g) : null;
-  let options: string[] = pattern ? pattern.match(/([A-Z][A-Z|a-z|0-9|\s|-]*)/g) : null;
-  if (options) {
+  let options: string[] = pattern ? pattern.match(/(?<=\().*?(?=\))/g) : null;
+  if (options && options[0].indexOf("\\d") === -1) {
+    options = options.map((string, index) => {
+      return string.replace("(", "");
+    })
     paramTypes[param] = (
       <IonItem>
         <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
@@ -96,6 +64,39 @@ const ParamSelect: React.FC<any> = (params) => {
       </IonItem>
     )
   }
+
+  paramTypes.LeagueID = (
+    <IonItem>
+      <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
+      <IonSelect value={state ? state : "00"} interface="popover" onIonChange={(e) => {selectChanged(e, setState, param)}}>
+        <IonSelectOption value="00">NBA</IonSelectOption>
+        <IonSelectOption value="01">ABA</IonSelectOption>
+        <IonSelectOption value="20">G League</IonSelectOption>
+        <IonSelectOption value="10">WNBA</IonSelectOption>
+      </IonSelect>
+    </IonItem>
+  );
+  paramTypes.StatCategory =  (
+    <IonItem>
+      <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
+      <IonSelect value={state ? state : statCategories[0].value} interface="popover" onIonChange={(e) => {selectChanged(e, setState, param)}}>
+        {statCategories.map((option, index) => {
+          return <IonSelectOption key={index} value={option.value}>{option.name}</IonSelectOption>
+        })}
+      </IonSelect>
+    </IonItem>
+  );
+  paramTypes.Season = paramTypes.SeasonYear = (
+    <IonItem>
+      <IonLabel color={required ? "danger" : ""} position="stacked">{params.param}</IonLabel>
+      <IonSelect value={state ? state : years[0]} onIonChange={(e) => {selectChanged(e, setState, param)}}>
+        {years.map((option, index) => {
+          return <IonSelectOption key={index} value={option}>{option}</IonSelectOption>
+        })}
+      </IonSelect>
+    </IonItem>
+  )
+
 
   let def = (
     <IonItem>
@@ -109,7 +110,7 @@ const ParamSelect: React.FC<any> = (params) => {
       selectChanged({detail: {value: "00"}}, setState, param)
     if (param === "Season" || param === "SeasonYear")
       selectChanged({detail: {value: years[0]}}, setState, param)
-    if (options)
+    if (options && options[0].indexOf("\d") === -1)
       selectChanged({detail: {value: options[0]}}, setState, param)
     if (param === "StatCategory")
       selectChanged({detail: {value: statCategories[0].value}}, setState, param)
