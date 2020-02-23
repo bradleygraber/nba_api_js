@@ -152,13 +152,13 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
         </IonRow>
         <IonRow><IonCol>
           <DataTable
-            responsive
+            noHeader={true}
             columns={columns}
             data={data}
             dense={true}
-            fixedHeader
-            fixedHeaderScrollHeight="300px"
             progressPending={loading}
+            striped={true}
+            pagination={true}
           />
         </IonCol></IonRow>
         </IonGrid>

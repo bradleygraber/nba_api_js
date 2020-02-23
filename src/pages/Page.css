@@ -5,3 +5,6 @@ ion-content ion-toolbar {
 .minWidth {
   min-width: 150px;
 }
+.rdt_Pagination {
+  justify-content: flex-start !important;
+}
