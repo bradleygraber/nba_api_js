@@ -129,7 +129,7 @@ const ParamSelect: React.FC<any> = (params) => {
     // eslint-disable-next-line
     if (options && options[0].indexOf("\d") === -1)
       selectChanged({detail: {value: options[0]}}, setState, param)
-    if (param === "StatCategory" && endPoint != "HomePageLeaders")
+    if (param === "StatCategory" && endPoint !== "HomePageLeaders")
       selectChanged({detail: {value: statCategories[0].value}}, setState, param)
   }
 
