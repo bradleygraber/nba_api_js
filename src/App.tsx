@@ -39,9 +39,20 @@ for (let prop in endPointsS) {
   }
 }
 
+const defaultProxy = "https://cors-anywhere.herokuapp.com/";
+
 const App: React.FC = () => {
+  let savedProxy = localStorage.getItem('proxy');
+  savedProxy = savedProxy !== undefined ? savedProxy : defaultProxy;
+
   const [selectedPage, setSelectedPage] = useState('');
   const [widthLoaded, setWidthLoaded] = useState(false);
+  const [proxy, setProxy] = useState(savedProxy);
+
+  useEffect(() => {
+    localStorage.setItem('proxy', proxy);
+    console.log("saving" + proxy)
+  }, [proxy])
 
   useEffect(() => {
     let checkWidthLoaded = setInterval(check, 100);
@@ -59,11 +70,11 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <IonSplitPane contentId="main">
-          <Menu selectedPage={selectedPage} />
+          <Menu selectedPage={selectedPage} setProxy={setProxy} proxy={proxy}/>
           <IonRouterOutlet id="main">
             <Route path="/page/:name" render={(props) => {
               setSelectedPage(props.match.params.name);
-              return <Page {...props} />;
+              return <Page {...props} {...{proxy}} />;
             }} exact={true} />
             <Route path="/" render={() => <Redirect to={`/page/${firstProp}`} />} exact={true} />
           </IonRouterOutlet>

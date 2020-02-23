@@ -9,8 +9,11 @@ import {
   IonButton,
   IonHeader,
   IonToolbar,
-  IonTitle,
+  IonTitle, IonModal, IonGrid, IonRow, IonCol, IonInput
 } from '@ionic/react';
+
+import { menu } from 'ionicons/icons';
+
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { star, starOutline } from 'ionicons/icons';
@@ -42,11 +45,13 @@ for (let prop in endPointsS) {
   }
 }
 
-const Menu: React.FunctionComponent<MenuProps> = ({ selectedPage }) => {
+const Menu: React.FunctionComponent<any> = ({ selectedPage, setProxy, proxy }) => {
   let savedFavorites = localStorage.getItem('favorites');
   savedFavorites = savedFavorites ? JSON.parse(savedFavorites) : {};
 
   let [favorites, setFavorites] = useState<any>(savedFavorites);
+  let [modalVisible, setModalVisible] = useState(false);
+  let [localProxy, setLocalProxy] = useState(proxy);
 
   useEffect(() => {
     localStorage.setItem('favorites', JSON.stringify(favorites));
@@ -96,6 +101,10 @@ const Menu: React.FunctionComponent<MenuProps> = ({ selectedPage }) => {
       <IonToolbar>
         <IonTitle>nba_api Endpoints Client</IonTitle>
         <a id="titleUrl" target="_blank" rel="noopener noreferrer" href="https://github.com/swar/nba_api">https://github.com/swar/nba_api</a>
+        <IonButton
+          slot="end"
+          fill="clear"
+          onClick={(e:any) => {e.preventDefault(); e.stopPropagation(); setModalVisible(true); }}><IonIcon slot="icon-only" icon={menu}/></IonButton>
       </IonToolbar>
     </IonHeader>
       <IonContent>
@@ -106,6 +115,29 @@ const Menu: React.FunctionComponent<MenuProps> = ({ selectedPage }) => {
           {nonFavs}
         </Accordion>
       </IonContent>
+      <IonModal isOpen={modalVisible}>
+        <IonItem
+          class="ion-text-center"
+          color="primary">
+          <IonLabel>
+            Set Proxy
+          </IonLabel>
+        </IonItem>
+        <IonItem>
+          <IonLabel position="stacked">Proxy URL</IonLabel>
+          <IonInput value={localProxy} onIonChange={(e: any) => setLocalProxy(e.detail.value)}></IonInput>
+        </IonItem>
+        <IonGrid>
+        <IonRow>
+          <IonCol>
+            <IonButton onClick={() => setModalVisible(false)}>Cancel</IonButton>
+          </IonCol>
+          <IonCol>
+            <IonButton onClick={() => {setProxy(localProxy); setModalVisible(false)}}>Set</IonButton>
+          </IonCol>
+        </IonRow>
+        </IonGrid>
+      </IonModal>
     </IonMenu>
   );
 };

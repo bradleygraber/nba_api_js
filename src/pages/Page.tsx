@@ -1,7 +1,6 @@
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonCol,
   IonToolbar, IonGrid, IonRow, IonButton, IonAlert } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
-import { RouteComponentProps } from 'react-router';
 import ParamSelect from '../components/ParamSelect';
 import './Page.css';
 import eps from '../data/endPoints.json';
@@ -15,10 +14,7 @@ interface StringIter {
 let endPoints: StringIter = eps;
 
 
-
-
-
-const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
+const Page: React.FC<any> = ({ match, proxy }) => {
   let endPoint = match.params.name;
   let patterns = endPoints[endPoint].parameter_patterns;
   let requiredParams = endPoints[endPoint].required_parameters;
@@ -55,7 +51,7 @@ const Page: React.FC<RouteComponentProps<{ name: string; }>> = ({ match }) => {
   }
   const request = async (endPoint: string, params: any) => {
     setLoading(true);
-    var url = `http://localhost:8080/https://stats.nba.com/stats/${endPoint.toLowerCase()}?`;
+    var url = proxy + `https://stats.nba.com/stats/${endPoint.toLowerCase()}?`;
 
     for (let prop in params) {
       url += prop + "=" + params[prop].replace(/\s/g, '+') + "&";
