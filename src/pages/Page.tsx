@@ -22,6 +22,8 @@ const timeout = (ms: number, promise:Promise<any>) => {
   })
 }
 const download = (filename:string, text:string) => {
+  let trimmedFilename = filename.match(/(?:.+?stats.nba.com\/stats\/)(.+)/);
+  filename = trimmedFilename && trimmedFilename.length > 1 ? trimmedFilename[1] : filename
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
   element.setAttribute('download', filename);
@@ -94,7 +96,6 @@ const Page: React.FC<any> = ({ match, proxy, headers }) => {
     catch (e) {}
     let parsedHeaders = parsed ? parsed : {};
 
-    console.log(parsedHeaders);
     var requestOptions:any = {
       method: 'GET',
       headers: parsedHeaders,
@@ -183,7 +184,7 @@ const Page: React.FC<any> = ({ match, proxy, headers }) => {
         </IonCol></IonRow>
         <IonRow  class="ion-text-center">
           <IonCol>
-            <IonButton class={data.length > 0 ? "" : "ion-hide"} onClick={(e:any) => {download("query.csv", csv([columns.map((col:any) => col.name), ...data]))}}>Export CSV</IonButton>
+            <IonButton class={data.length > 0 ? "" : "ion-hide"} onClick={(e:any) => {download(href+".csv", csv([columns.map((col:any) => col.name), ...data]))}}>Export CSV</IonButton>
           </IonCol>
         </IonRow>
         </IonGrid>
