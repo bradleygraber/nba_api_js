@@ -1,6 +1,6 @@
 import { IonContent, IonHeader, IonToolbar, IonTitle, IonPage, IonIcon, IonButton, IonTextarea} from '@ionic/react';
 import React, { useState, useEffect } from 'react';
-import { close } from 'ionicons/icons';
+import { close, open } from 'ionicons/icons';
 
 import Draggable from 'react-draggable';
 
@@ -11,7 +11,7 @@ const FloatingDialog: React.FC<any> = () => {
   savedScratches = savedScratches ? savedScratches : "Enter whatever text you would like to keep here.";
 
   let [position, setPosition] = useState({x: 0, y: 0});
-  let [dialogBoxIsVisible, setDialogBoxIsVisible] = useState(true);
+  let [dialogBoxIsVisible, setDialogBoxIsVisible] = useState(false);
   let [scratches, setScratches] = useState(savedScratches);
 
   let [bounds, setBounds] = useState({top: 0, left: 0, right: document.body.clientWidth-400, bottom: document.body.clientHeight-400});
@@ -27,7 +27,7 @@ const FloatingDialog: React.FC<any> = () => {
       {top: 0, left: 0, right: document.body.clientWidth-400, bottom: document.body.clientHeight-50} );
   }, [dialogBoxIsVisible]);
 
-  let startPosition = {x: document.body.clientWidth-400, y: 0}
+  let startPosition = {x: document.body.clientWidth-400, y: document.body.clientHeight-75}
 
   let handleDrag = (e:any, position: any) => {
     setPosition({x: position.x, y: position.y});
@@ -35,13 +35,15 @@ const FloatingDialog: React.FC<any> = () => {
 
 
   return (
-        <Draggable bounds={bounds} position={position.x === 0 ? startPosition : position} onDrag={handleDrag} handle="#header">
+        <Draggable
+        bounds={bounds} position={position.x === 0 ? startPosition : position}
+        onDrag={handleDrag} handle="#header">
         <IonPage id="dialogBox" className={dialogBoxIsVisible ? "dialogBox" : "dialogBox hidden"}>
           <IonHeader id="header">
             <IonToolbar color="primary">
               <IonTitle size="small" >Scratch Pad</IonTitle>
               <IonButton color="secondary" slot="end" fill="clear" onClick={() => setDialogBoxIsVisible(!dialogBoxIsVisible)}>
-                <IonIcon slot="icon-only" icon={close} />
+                <IonIcon slot="icon-only" icon={dialogBoxIsVisible ? close : open} />
               </IonButton>
             </IonToolbar>
           </IonHeader>
