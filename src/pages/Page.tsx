@@ -21,6 +21,29 @@ const timeout = (ms: number, promise:Promise<any>) => {
     promise.then(resolve, reject)
   })
 }
+const download = (filename:string, text:string) => {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+const csv = (arr: any[]) => {
+  if (arr.length < 1)
+    return "";
+
+  let csv = arr[0].join(",") + "\n";
+  let headers = arr[0];
+  for (let i = 1; i < arr.length; i++) {
+    csv += headers.map((header: string) => arr[i][header]).join(",") + "\n";
+  }
+  return csv;
+}
 
 const Page: React.FC<any> = ({ match, proxy, headers }) => {
   let endPoint = match.params.name;
@@ -144,7 +167,7 @@ const Page: React.FC<any> = ({ match, proxy, headers }) => {
         </IonRow>
         <IonRow class="ion-text-center">
           <IonCol>
-            <IonButton onClick={(e:any) => {request(endPoint, paramState)}}>Submit</IonButton>
+            <IonButton onClick={(e:any) => {request(endPoint, paramState)}}>Submit Query</IonButton>
           </IonCol>
         </IonRow>
         <IonRow><IonCol>
@@ -158,6 +181,11 @@ const Page: React.FC<any> = ({ match, proxy, headers }) => {
             pagination={true}
           />
         </IonCol></IonRow>
+        <IonRow  class="ion-text-center">
+          <IonCol>
+            <IonButton class={data.length > 0 ? "" : "ion-hide"} onClick={(e:any) => {download("query.csv", csv([columns.map((col:any) => col.name), ...data]))}}>Export CSV</IonButton>
+          </IonCol>
+        </IonRow>
         </IonGrid>
       </IonContent>
       <IonAlert
